@@ -1,0 +1,89 @@
+
+==================== FINAL INTERFACE ====================
+2016-01-01 13:54:09.194241 UTC
+
+interface metri_DrPbOsB5imgKLrbwNDR9nc:Lib 7102
+  interface hash: 7b94c395add1e9be56e2c8823ebf285b
+  ABI hash: d72d7dec546150b87487ebb3d6c978ec
+  export-list hash: f892358cdeccce9410ee0cb936b91e3e
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 1177ed9910be22cb08b17094c1021b20
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  Lib.someFunc
+module dependencies:
+package dependencies: base-4.8.1.0* ghc-prim-0.4.0.0
+                      integer-gmp-1.0.0.0
+orphans: base-4.8.1.0:GHC.Base base-4.8.1.0:GHC.Float
+family instance modules: base-4.8.1.0:Control.Applicative
+                         base-4.8.1.0:Data.Either base-4.8.1.0:Data.Monoid
+                         base-4.8.1.0:Data.Type.Equality base-4.8.1.0:GHC.Generics
+import  -/  base-4.8.1.0:GHC.Base 1db77db5dae73d8c424c85b09fbadb89
+import  -/  base-4.8.1.0:GHC.IO.Exception d3ead07ed0a008300b39abe0b3be2e2c
+import  -/  base-4.8.1.0:Prelude 518f762991bc287d78f21a73c974da1f
+import  -/  base-4.8.1.0:System.Environment 946ddc2d7c48138bb213316abaff2a8d
+import  -/  base-4.8.1.0:System.Exit 667ccf9b7fe125c4036efb58a244974a
+import  -/  base-4.8.1.0:System.IO d541b8bdf18c04de3ab7ea0277c4eba3
+import  -/  ghc-prim-0.4.0.0:GHC.Types 6b27fb3fdbd0e3f0925a4496c66513bb
+729781f7fcfa5b6d56d6fcedb16b4b99
+  $wa ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 1, Strictness: <B,A>b, Inline: [0] -}
+15704e94c6ee15038e58f9930ad1b9bc
+  someFunc :: GHC.Types.IO ()
+  {- Arity: 1, Strictness: <L,U>,
+     Unfolding: InlineRule (0, True, True)
+                Lib.someFunc1 `cast` (Sym (GHC.Types.NTCo:IO[0] <()>_R)) -}
+e5e8d101df987073b8e8c531137d9843
+  someFunc1 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 1, Strictness: <L,U>,
+     Unfolding: (\ s :: GHC.Prim.State# GHC.Prim.RealWorld[OneShot] ->
+                 case System.Environment.getArgs1 s of ds1 { (#,#) ipv ipv1 ->
+                 case ipv1 of wild {
+                   []
+                   -> case GHC.IO.Handle.Text.hPutStr2
+                             GHC.IO.Handle.FD.stdout
+                             Lib.someFunc3
+                             GHC.Types.True
+                             ipv of ds2 { (#,#) ipv2 ipv3 ->
+                      System.Exit.exitSuccess1 @ () ipv2 }
+                   : ds ds2
+                   -> case GHC.Base.eqString ds Lib.someFunc2 of wild1 {
+                        GHC.Types.False -> Lib.$wa ipv
+                        GHC.Types.True
+                        -> case ds2 of wild2 {
+                             []
+                             -> case GHC.IO.Handle.Text.hPutStr2
+                                       GHC.IO.Handle.FD.stdout
+                                       Lib.someFunc3
+                                       GHC.Types.True
+                                       ipv of ds3 { (#,#) ipv2 ipv3 ->
+                                System.Exit.exitSuccess1 @ () ipv2 }
+                             : ipv2 ipv3 -> Lib.$wa ipv } } } }) -}
+7c2145bb0149112df697a0cc16c8a0c1
+  someFunc2 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "-h"#) -}
+beb6c223279c70e791b127af7ebacd70
+  someFunc3 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString#
+                   "Usage: dateParser \n\
+                   \ [-v version]\n\
+                   \ [-h help]\n\
+                   \ [-c find oldest missing]\n\
+                   \ [-b print bash gui] \n\
+                   \ [-w write bash file] \n\
+                   \ [-u update all git hooks] \n\
+                   \ [-r find rebase commits in current]"#) -}
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: safe
+require own pkg trusted: False
+
