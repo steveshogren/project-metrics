@@ -9,14 +9,14 @@ someFunc :: IO ()
 someFunc = getArgs >>= parse
 
 parse :: [String] -> IO ()
-parse ["-h"] = usage  >> exit
+parse ["-h"] = (putStrLn "DLFJ")  >> exit
 parse [] = usage >> exit
 
 usage :: IO ()
 usage   = putStrLn "Usage: dateParser \n [-v version]\n [-h help]\n [-c find oldest missing]\n [-b print bash gui] \n [-w write bash file] \n [-u update all git hooks] \n [-r find rebase commits in current]"
 
 exit :: IO a
-exit    = exitSuccess
+exit = exitSuccess
 
 die :: IO a
-die     = exitWith (ExitFailure 1)
+die = exitWith (ExitFailure 1)
