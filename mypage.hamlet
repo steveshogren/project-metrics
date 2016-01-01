@@ -1,0 +1,33 @@
+$doctype 5
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi">
+    <script type="text/javascript">
+        google.load('visualization', '1', {packages: ['corechart', 'line']});
+        google.setOnLoadCallback(drawBasic);
+        function loadCharts() {
+           drawBasic('chart_div', '', #{exit});
+           drawBasic('chart2_div', '', #{other});
+        }
+
+        function drawBasic(id, name, data) {
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'X');
+            data.addColumn('number', 'Count');
+
+            data.addRows([data]);
+
+            var options = {
+                hAxis: {title: 'Time'},
+                vAxis: {title: 'Counts}
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById(id));
+            chart.draw(data, options);
+         }
+  <div id="chart_div"></div>
+    <body>
+        <h2>This is a test
+        <div>Value of test variable: #{testVariable}
+        <div id="chart_div">
+        <div id="chart2_div">
