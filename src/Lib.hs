@@ -14,6 +14,27 @@ import Text.Hamlet
 import Text.Blaze.Html.Renderer.String (renderHtml)
 import Text.Blaze.Html
 
+data CountDate = CountDate {
+      date :: String
+    , count  :: Int
+    } deriving (Read, Show)
+
+data MetricHistory = MetricHistory {
+    history  :: [CountDate]
+    } deriving (Read, Show)
+
+load :: (Read a) => FilePath -> IO a
+load f = do s <- readFile f
+            return (read s)
+
+save :: (Show a) => a -> FilePath -> IO ()
+save x f = writeFile f (show x)
+
+roundTrip :: IO MetricHistory
+roundTrip =
+  save (MetricHistory{ history= [(CountDate{date="today",count=1})]}) "db.txt"
+     >> load "db.txt"
+
 renderTemplate :: String -> String -> String -> String
 renderTemplate testVariable exit other = renderHtml ( $(shamletFile "mypage.hamlet") )
 
@@ -41,6 +62,7 @@ parse ["-h"] = usage  >> exit
 parse ["-a"] = (grepRepo >>= putStrLn) >> exit
 parse ["-s"] = s >> exit
 parse ["-m"] = m >> exit
+parse ["-r"] = roundTrip >>= (putStrLn . show) >> exit
 parse [] = usage >> exit
 
 usage :: IO ()
