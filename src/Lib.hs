@@ -13,15 +13,21 @@ import System.Process (readProcess)
 import Text.Hamlet
 import Text.Blaze.Html.Renderer.String (renderHtml)
 import Text.Blaze.Html
+import Data.Time (formatTime, showGregorian, addDays, localDay, getCurrentTime, getCurrentTimeZone, utcToLocalTime)
+import Data.Time.Format (defaultTimeLocale)
+import Control.Monad(liftM2, liftM)
+
+today :: IO String
+today = do
+  time <- liftM2 utcToLocalTime getCurrentTimeZone getCurrentTime
+  return $ showGregorian $ localDay time
 
 data CountDate = CountDate {
       date :: String
     , count  :: Int
     } deriving (Read, Show)
 
-data MetricHistory = MetricHistory {
-    history  :: [CountDate]
-    } deriving (Read, Show)
+type MetricHistory = [CountDate]
 
 load :: (Read a) => FilePath -> IO a
 load f = do s <- readFile f
@@ -32,8 +38,15 @@ save x f = writeFile f (show x)
 
 roundTrip :: IO MetricHistory
 roundTrip =
-  save (MetricHistory{ history= [(CountDate{date="today",count=1})]}) "db.txt"
+  save [(CountDate{date="today",count=1})] "db.txt"
      >> load "db.txt"
+
+addMetric :: String -> Int -> IO MetricHistory
+addMetric file count = do
+  t <- today
+  existing <- load file
+  length existing `seq` (save (existing ++ [(CountDate{date=t,count=count})]) file
+                         >> load file)
 
 renderTemplate :: String -> String -> String -> String
 renderTemplate testVariable exit other = renderHtml ( $(shamletFile "mypage.hamlet") )
