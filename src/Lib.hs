@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
 module Lib
-    ( main
+    ( mainEntry
     ) where
 
 import System.Environment
@@ -24,8 +24,8 @@ grepRepo search = do
   output <- readProcess "git" ["grep", search] "."
   (return . length . lines) $ output
 
-main :: IO ()
-main = getArgs >>= parse
+mainEntry :: IO ()
+mainEntry = getArgs >>= parse
 
 parse :: [String] -> IO ()
 parse ["-a"] = ((grepRepo "exit") >>= (addMetric "db.txt" "exit")) >> exit
