@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <title>V5 Quality Charts</title>
+ 
+        <!-- load Google AJAX API -->
+        <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+        <script type="text/javascript">
+            //load the Google Visualization API and the chart
+            google.load('visualization', '1', {'packages': ['columnchart']});
+ 
+			google.setOnLoadCallback(function(){ 
+              createChart('Identifier Counts','idchart', 
+              [['2015-12-16',1583],['2015-12-22',1583],['2015-12-30',1584]])
+            });
+google.setOnLoadCallback(function(){ 
+              createChart('Wilson Find Counts','findchart', 
+              [['2015-12-16',397],['2015-12-22',397],['2015-12-30',397]])
+            });
+google.setOnLoadCallback(function(){ 
+              createChart('Wilson Find All Counts','findallchart', 
+              [['2015-12-16',294],['2015-12-22',294],['2015-12-30',294]])
+            });
+google.setOnLoadCallback(function(){ 
+              createChart('Wilson Save Counts','savechart', 
+              [['2015-12-16',237],['2015-12-22',237],['2015-12-30',237]])
+            });
+google.setOnLoadCallback(function(){ 
+              createChart('C# Cloc','csharpchart', 
+              [['2015-12-29',1314958],['2015-12-30',1314963]])
+            });
+google.setOnLoadCallback(function(){ 
+              createChart('Single Use Interfaces','singleUseInterfaces', 
+              [['2015-12-29',744],['2015-12-30',744]])
+            });
+
+		
+            //callback function
+            function createChart(name, id, values) {
+ 
+                //create data table object
+                var dataTable = new google.visualization.DataTable();
+ 
+                //define columns
+                dataTable.addColumn('string','Date');
+                dataTable.addColumn('number', 'Counts');
+ 
+                //define rows of data
+                dataTable.addRows(values);
+ 
+                //instantiate our chart object
+                var chart = new google.visualization.LineChart (document.getElementById(id));
+ 
+                //define options for visualization
+                var options = {width: 400, height: 240, is3D: false, title: name};
+ 
+                //draw our chart
+                chart.draw(dataTable, options);
+ 
+            }
+
+
+        </script>
+ 
+    </head>
+ 
+    <body>
+ 
+        <!--Div for our chart -->
+		<div style="float:left" id="idchart"></div>
+<div style="float:left" id="findchart"></div>
+<div style="float:left" id="findallchart"></div>
+<div style="float:left" id="savechart"></div>
+<div style="float:left" id="csharpchart"></div>
+<div style="float:left" id="singleUseInterfaces"></div>
+
+    </body>
+</html>
