@@ -1,1 +1,1 @@
-fromList []
+fromList [("exit",fromList [("2016-01-04",0)])]

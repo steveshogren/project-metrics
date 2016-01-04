@@ -10,6 +10,7 @@ import System.Process (readProcess)
 import Text.Hamlet
 import Text.Blaze.Html.Renderer.String (renderHtml)
 import Text.Blaze.Html
+import Data.List (isInfixOf)
 import Database (load, addMetric, clearFile, generateJson)
 
 renderTemplate :: String -> String -> String -> String
@@ -22,16 +23,32 @@ generateHtml = do
 grepRepo :: String -> IO Int
 grepRepo search = do
   output <- readProcess "git" ["grep", search] "."
-  (return . length . lines) $ output
+  (return . length . (filter (isInfixOf ".cs")) . lines) $ output
+
+onlyCoreUsages :: String -> Bool
+onlyCoreUsages a = (isInfixOf "Algo.Collateral.Core" a) 
+  || (isInfixOf "Proxies" a)
+  || (isInfixOf "Database" a)
+  || (isInfixOf "Test" a)
+  || (isInfixOf "Reporting" a)
+  || (isInfixOf "Wilson" a)
+  || (isInfixOf "packages" a)
+  || (isInfixOf "lib" a)
+  || (isInfixOf "Designer" a)
+
+testGrep search = do
+  output <- readProcess "git" ["grep", search] "."
+  (return . show . length . (filter (not . onlyCoreUsages)) . (filter (isInfixOf ".cs")) . lines) $ output
 
 mainEntry :: IO ()
 mainEntry = getArgs >>= parse
 
 parse :: [String] -> IO ()
-parse ["-a"] = ((grepRepo "exit") >>= (addMetric "db.txt" "exit")) >> exit
+parse ["-a"] = ((grepRepo "Identifier") >>= (addMetric "db.txt" "exit")) >> exit
 parse ["-s"] = generateHtml >> exit
 parse ["-c"] = clearFile "db.txt" >> exit
 parse ["-h"] = usage >> exit
+parse ["-t"] = ((testGrep "Identifier") >>= putStrLn) >> exit
 parse [] = usage >> exit
 
 usage :: IO ()
