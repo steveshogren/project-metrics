@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <title>V5 Quality Charts</title>
+ 
+        <!-- load Google AJAX API -->
+        <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+        <script type="text/javascript">
+            //load the Google Visualization API and the chart
+            google.load('visualization', '1', {'packages': ['columnchart']});
+ 
+			<%= onLoadCallbacks %>
+		
+            //callback function
+            function createChart(name, id, values) {
+ 
+                //create data table object
+                var dataTable = new google.visualization.DataTable();
+ 
+                //define columns
+                dataTable.addColumn('string','Date');
+                dataTable.addColumn('number', 'Counts');
+ 
+                //define rows of data
+                dataTable.addRows(values);
+ 
+                //instantiate our chart object
+                var chart = new google.visualization.LineChart (document.getElementById(id));
+ 
+                //define options for visualization
+                var options = {width: 400, height: 240, is3D: false, title: name};
+ 
+                //draw our chart
+                chart.draw(dataTable, options);
+ 
+            }
+
+
+        </script>
+ 
+    </head>
+ 
+    <body>
+ 
+        <!--Div for our chart -->
+		<%= chartDivs %>
+    </body>
+</html>

@@ -1,0 +1,25 @@
+files,language,blank,comment,code,"http://cloc.sourceforge.net v 1.64  T=41.24 s (261.7 files/s, 74177.4 lines/s)"
+9507,C#,193917,65366,1314963
+267,SQL,42048,15719,678316
+359,HTML,27166,21040,563306
+62,XML,62,119,50870
+138,MSBuild script,0,853,35517
+63,XSD,8,0,21215
+214,ASP.Net,170,0,17838
+21,Ruby,472,73,1962
+42,Protocol Buffers,334,762,1184
+23,F#,265,91,1110
+4,XSLT,82,30,1049
+16,WiX source,54,10,925
+3,CSS,48,12,490
+47,DOS Batch,60,11,345
+5,Javascript,71,91,307
+4,YAML,35,0,238
+7,Visual Basic,9,0,108
+1,Puppet,9,0,49
+1,Python,13,0,27
+3,Bourne Shell,3,0,21
+2,PowerShell,5,0,15
+1,WiX include,0,0,7
+1,ERB,0,0,7
+1,WiX string localization,0,0,4
