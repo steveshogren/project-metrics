@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
 module Lib
-    ( someFunc
+    ( main
     ) where
 
 import System.Environment
@@ -19,23 +19,23 @@ generateHtml = do
   exit <- generateJson "db.txt" "exit"
   writeFile "./report.html" $ renderTemplate "foobar" exit exit
 
-grepRepo :: IO Int
-grepRepo = do
-  output <- readProcess "git" ["grep", "exit"] "."
+grepRepo :: String -> IO Int
+grepRepo search = do
+  output <- readProcess "git" ["grep", search] "."
   (return . length . lines) $ output
 
-someFunc :: IO ()
-someFunc = getArgs >>= parse
+main :: IO ()
+main = getArgs >>= parse
 
 parse :: [String] -> IO ()
-parse ["-h"] = usage >> exit
-parse ["-a"] = (grepRepo >>= (addMetric "db.txt" "exit")) >> exit
+parse ["-a"] = ((grepRepo "exit") >>= (addMetric "db.txt" "exit")) >> exit
 parse ["-s"] = generateHtml >> exit
 parse ["-c"] = clearFile "db.txt" >> exit
+parse ["-h"] = usage >> exit
 parse [] = usage >> exit
 
 usage :: IO ()
-usage   = putStrLn ""
+usage = putStrLn "Usage: metrics \n [-h help]\n [-c clear database]\n [-s generate html file from database] \n [-a update database with todays metrics]\n"
 
 exit :: IO a
 exit = exitSuccess
