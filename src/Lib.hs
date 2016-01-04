@@ -17,13 +17,13 @@ renderTemplate :: String -> String -> String -> String
 renderTemplate testVariable exit other = renderHtml ( $(shamletFile "mypage.hamlet") )
 
 generateHtml = do
-  exit <- generateJson "db.txt" "exit"
+  exit <- generateJson "db.txt" "Identifier"
   writeFile "./report.html" $ renderTemplate "foobar" exit exit
 
 grepRepo :: String -> IO Int
 grepRepo search = do
-  output <- readProcess "git" ["grep", search] "."
-  (return . length . (filter (isInfixOf ".cs")) . lines) $ output
+  output <- readProcess "git" ["grep", "-w", search] "."
+  (return . length . (filter (not . onlyCoreUsages)) . (filter (isInfixOf ".cs")) . lines) $ output
 
 onlyCoreUsages :: String -> Bool
 onlyCoreUsages a = (isInfixOf "Algo.Collateral.Core" a) 
@@ -36,19 +36,15 @@ onlyCoreUsages a = (isInfixOf "Algo.Collateral.Core" a)
   || (isInfixOf "lib" a)
   || (isInfixOf "Designer" a)
 
-testGrep search = do
-  output <- readProcess "git" ["grep", search] "."
-  (return . show . length . (filter (not . onlyCoreUsages)) . (filter (isInfixOf ".cs")) . lines) $ output
-
 mainEntry :: IO ()
 mainEntry = getArgs >>= parse
 
 parse :: [String] -> IO ()
-parse ["-a"] = ((grepRepo "Identifier") >>= (addMetric "db.txt" "exit")) >> exit
+parse ["-a"] = ((grepRepo "Identifier") >>= (addMetric "db.txt" "Identifier")) >> exit
 parse ["-s"] = generateHtml >> exit
 parse ["-c"] = clearFile "db.txt" >> exit
 parse ["-h"] = usage >> exit
-parse ["-t"] = ((testGrep "Identifier") >>= putStrLn) >> exit
+-- parse ["-t"] = ((testGrep "Identifier") >>= putStrLn) >> exit
 parse [] = usage >> exit
 
 usage :: IO ()
