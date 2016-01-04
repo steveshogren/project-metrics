@@ -4,22 +4,22 @@ $doctype 5
     <script type="text/javascript" src="https://www.google.com/jsapi">
     <script type="text/javascript">
         google.load('visualization', '1', {packages: ['corechart', 'line']});
-        google.setOnLoadCallback(drawBasic);
+        google.setOnLoadCallback(loadCharts);
         function loadCharts() {
-           drawBasic('chart_div', '', #{exit});
-           drawBasic('chart2_div', '', #{other});
+           drawBasic('chart_div', '', [#{preEscapedToMarkup exit}]);
+           drawBasic('chart2_div', '', [#{preEscapedToMarkup other}]);
         }
 
-        function drawBasic(id, name, data) {
+        function drawBasic(id, name, d) {
             var data = new google.visualization.DataTable();
-            data.addColumn('number', 'X');
+            data.addColumn('string', 'X');
             data.addColumn('number', 'Count');
 
-            data.addRows([data]);
+            data.addRows(d);
 
             var options = {
                 hAxis: {title: 'Time'},
-                vAxis: {title: 'Counts}
+                vAxis: {title: 'Counts'}
             };
 
             var chart = new google.visualization.LineChart(document.getElementById(id));

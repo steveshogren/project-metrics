@@ -18,6 +18,7 @@ library
   exposed-modules:     Lib
   build-depends:       base >= 4.7 && < 5
                      , blaze-html >= 0.8.1.0
+                     , containers >= 0.5.6.2
                      , process >= 1.2.3.0
                      , shakespeare
                      , time >= 1.5.0.1
@@ -29,6 +30,7 @@ executable metrics-exe
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , blaze-html >= 0.8.1.0
+                     , containers >= 0.5.6.2
                      , metrics
                      , process >= 1.2.3.0
                      , shakespeare
@@ -41,6 +43,7 @@ test-suite metrics-test
   main-is:             Spec.hs
   build-depends:       base
                      , blaze-html >= 0.8.1.0
+                     , containers >= 0.5.6.2
                      , metrics
                      , process >= 1.2.3.0
                      , shakespeare
