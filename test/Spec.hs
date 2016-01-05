@@ -1,5 +1,6 @@
 import Test.HUnit
 import qualified Lib as S
+import Data.Functor ((<$>))
 
 main :: IO ()
 main = do
@@ -7,31 +8,19 @@ main = do
   return ()
 
 identifier :: Assertion
-identifier = do
-  a <- S.countGrepRepo "Identifier"
-  found <- S.grepRepo "Identifier"
-  (putStrLn . unlines) found
-  a @?= 4
+identifier = S.identifierCount >>= (@?= 4)
 
 save :: Assertion
-save = do
-  a <- S.countGrepRepo "Save"
-  a @?= 2
+save = S.saveCount >>= (@?= 2)
 
 findAll :: Assertion
-findAll = do
-  a <- S.countGrepRepo ".FindAll("
-  found <- S.grepRepo ".FindAll("
-  (putStrLn . unlines) found
-  a @?= 2
+findAll = S.findAllCount >>= (@?= 2)
 
 find :: Assertion
-find = do
-  a <- S.countGrepRepo ".Find("
-  a @?= 2
+find = S.findCount >>= (@?= 2)
 
-tests = TestList ["save" ~: save 
-                  , "findall" ~: findAll 
-                  , "find" ~: find 
+tests = TestList ["save" ~: save
+                  , "findall" ~: findAll
+                  , "find" ~: find
                   , "identifier" ~: identifier]
 
