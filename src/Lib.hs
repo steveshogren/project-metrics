@@ -2,6 +2,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Lib
     ( mainEntry
+      , grepRepo
     ) where
 
 import System.Environment
