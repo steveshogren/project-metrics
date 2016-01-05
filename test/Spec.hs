@@ -8,7 +8,7 @@ main = do
 
 a2 :: Assertion
 a2 = do
-  a <- S.grepRepo "Identifier"
+  a <- S.countGrepRepo "Identifier"
   a @?= 4
 
 a1 :: Assertion
