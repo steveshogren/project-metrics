@@ -1,5 +1,5 @@
 import Test.HUnit
-import qualified Lib as S
+import qualified Grep as G
 import Data.Functor ((<$>))
 
 main :: IO ()
@@ -8,16 +8,16 @@ main = do
   return ()
 
 identifier :: Assertion
-identifier = S.identifierCount >>= (@?= 4)
+identifier = G.identifierCount >>= (@?= 4)
 
 save :: Assertion
-save = S.saveCount >>= (@?= 2)
+save = G.saveCount >>= (@?= 2)
 
 findAll :: Assertion
-findAll = S.findAllCount >>= (@?= 2)
+findAll = G.findAllCount >>= (@?= 2)
 
 find :: Assertion
-find = S.findCount >>= (@?= 2)
+find = G.findCount >>= (@?= 2)
 
 tests = TestList ["save" ~: save
                   , "findall" ~: findAll
