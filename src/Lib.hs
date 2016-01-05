@@ -28,10 +28,17 @@ contains a b =
   isInfixOf (toLower . pack $ a) (toLower . pack $ b)
    || isPrefixOf (toLower . pack $ a) (toLower . pack $ b)
 
+grepRepoWord :: String -> IO String
+grepRepoWord search = readProcess "git" ["grep", "-w", search] "."
+
+grepRepoExact :: String -> IO String
+grepRepoExact search = readProcess "git" ["grep", search] "."
+
+filterOnlyValid :: String -> [String]
+filterOnlyValid = ((filter (not . onlyCoreUsages)) . (filter (contains ".cs")) . lines)
+
 grepRepo :: String -> IO [String]
-grepRepo search = do
-  output <- readProcess "git" ["grep", "-w", search] "."
-  (return . (filter (not . onlyCoreUsages)) . (filter (contains ".cs")) . lines) $ output
+grepRepo search = filterOnlyValid <$> grepRepoWord search
 
 countGrepRepo search = length <$> grepRepo search
 
