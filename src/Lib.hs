@@ -33,7 +33,7 @@ grepRepo search = do
   output <- readProcess "git" ["grep", "-w", search] "."
   (return . (filter (not . onlyCoreUsages)) . (filter (contains ".cs")) . lines) $ output
 
-countGrepRepo a = length <$> grepRepo a
+countGrepRepo search = length <$> grepRepo search
 
 onlyCoreUsages :: String -> Bool
 onlyCoreUsages a = (contains "Algo.Collateral.Core" a)
