@@ -4,6 +4,10 @@ module Lib
     ( mainEntry
       , grepRepo
       , countGrepRepo
+      , identifierCount
+      , saveCount
+      , findCount
+      , findAllCount
     ) where
 
 import System.Environment
@@ -28,22 +32,18 @@ contains a b =
   isInfixOf (toLower . pack $ a) (toLower . pack $ b)
    || isPrefixOf (toLower . pack $ a) (toLower . pack $ b)
 
-grepRepoWord :: String -> IO String
-grepRepoWord search = readProcess "git" ["grep", "-w", search] "."
-
-grepRepoExact :: String -> IO String
-grepRepoExact search = readProcess "git" ["grep", search] "."
-
 filterOnlyValid :: String -> [String]
-filterOnlyValid = ((filter (not . onlyCoreUsages)) . (filter (contains ".cs")) . lines)
+filterOnlyValid = ((filter (not . ormOrFringeUsages)) . (filter (contains ".cs")) . lines)
 
-grepRepo :: String -> IO [String]
-grepRepo search = filterOnlyValid <$> grepRepoWord search
+grepRepo :: String -> String -> IO [String]
+grepRepo prefix search =
+  if prefix == "" then filterOnlyValid <$> readProcess "git" ["grep", search] "."
+  else filterOnlyValid <$> readProcess "git" ["grep", prefix, search] "."
 
-countGrepRepo search = length <$> grepRepo search
+countGrepRepo prefix search = length <$> grepRepo prefix search
 
-onlyCoreUsages :: String -> Bool
-onlyCoreUsages a = (contains "Algo.Collateral.Core" a)
+ormOrFringeUsages :: String -> Bool
+ormOrFringeUsages a = (contains "Algo.Collateral.Core" a)
   || (contains "Proxies" a)
   || (contains "statistics" a)
   || (contains "Database" a)
@@ -56,20 +56,24 @@ onlyCoreUsages a = (contains "Algo.Collateral.Core" a)
   || (contains "datalayer" a)
   || (contains "Designer" a)
 
-saveGrep search =
-  (countGrepRepo search) >>= (addMetric "db.txt" search)
+saveGrep p search =
+  (countGrepRepo p search) >>= (addMetric "db.txt" search)
+
+identifierCount = (countGrepRepo "-w" "Identifier")
+saveCount = (countGrepRepo "" "\\.Save(")
+findCount = (countGrepRepo "" "\\.Find(")
+findAllCount = (countGrepRepo "" "\\.FindAll(")
 
 mainEntry :: IO ()
 mainEntry = getArgs >>= parse
 
-
 parse :: [String] -> IO ()
-parse ["-a"] =  saveGrep "Identifier" >> exit
+parse ["-a"] =  saveGrep "-w" "Identifier" >> exit
 parse ["-s"] = generateHtml >> exit
 parse ["-c"] = clearFile "db.txt" >> exit
 parse ["-h"] = usage >> exit
-parse ["-t"] = ((countGrepRepo "Identifier") >>= (putStrLn . show)) >> exit
-parse ["-tt"] = ((grepRepo "Identifier") >>= (putStrLn . unlines)) >> exit
+parse ["-t"] = (identifierCount >>= (putStrLn . show)) >> exit
+parse ["-tt"] = ((grepRepo "-w" "Identifier") >>= (putStrLn . unlines)) >> exit
 parse [] = usage >> exit
 
 usage :: IO ()
