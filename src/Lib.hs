@@ -45,17 +45,24 @@ onlyCoreUsages a = (contains "Algo.Collateral.Core" a)
   || (contains "Wilson" a)
   || (contains "packages" a)
   || (contains "lib" a)
+  || (contains "codesmith" a)
+  || (contains "datalayer" a)
   || (contains "Designer" a)
+
+saveGrep search =
+  (countGrepRepo search) >>= (addMetric "db.txt" search)
 
 mainEntry :: IO ()
 mainEntry = getArgs >>= parse
 
+
 parse :: [String] -> IO ()
-parse ["-a"] = ((countGrepRepo "Identifier") >>= (addMetric "db.txt" "Identifier")) >> exit
+parse ["-a"] =  saveGrep "Identifier" >> exit
 parse ["-s"] = generateHtml >> exit
 parse ["-c"] = clearFile "db.txt" >> exit
 parse ["-h"] = usage >> exit
--- parse ["-t"] = ((testGrep "Identifier") >>= putStrLn) >> exit
+parse ["-t"] = ((countGrepRepo "Identifier") >>= (putStrLn . show)) >> exit
+parse ["-tt"] = ((grepRepo "Identifier") >>= (putStrLn . unlines)) >> exit
 parse [] = usage >> exit
 
 usage :: IO ()
