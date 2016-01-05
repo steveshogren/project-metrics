@@ -46,7 +46,6 @@ addMetric file metricName count = do
 
 makeJson :: Metric -> String
 makeJson = L.intercalate "," . map (\(date, cnt) -> "['" ++ date ++ "', " ++ (show cnt) ++ "]") . M.toAscList
--- makeJson = L.intercalate "," . map (\(date, cnt) -> "[\"" ++ date ++ "\", " ++ (show cnt) ++ "]") . M.toAscList
 
 generateJson file metricName = do
   db <- load file
