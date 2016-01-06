@@ -10,7 +10,7 @@ import Text.Hamlet
 import Text.Blaze.Html.Renderer.String (renderHtml)
 import Text.Blaze.Html
 import Database (load, addMetric, clearFile, generateJson, MetricHistory)
-import Grep (identifierCount, findCount)
+import Grep (identifierCount, findCount, findAllCount, saveCount)
 
 renderTemplate :: String -> String -> String -> String
 renderTemplate testVariable exit other = renderHtml ( $(shamletFile "mypage.hamlet") )
@@ -27,7 +27,10 @@ saveAllStats =
   saveGrep identifierCount "Identifier"
   `seq`
   saveGrep findCount "Find"
-
+  `seq`
+  saveGrep findAllCount "FindAll"
+  `seq`
+  saveGrep saveCount "Save"
 
 mainEntry :: IO ()
 mainEntry = getArgs >>= parse
