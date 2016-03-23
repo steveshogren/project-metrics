@@ -12,17 +12,18 @@ import Text.Blaze.Html
 import Database (load, addMetric, clearFile, generateJson, MetricHistory)
 import Grep (identifierCount, findCount, findAllCount, saveCount)
 
-renderTemplate :: String -> String -> String -> String
-renderTemplate testVariable exit other = renderHtml ( $(shamletFile "mypage.hamlet") )
+-- renderTemplate :: String -> String -> String -> String
+-- renderTemplate testVariable exit other = renderHtml ( $(shamletFile "mypage.hamlet") )
 
-generateHtml = do
-  exit <- generateJson "db.txt" "Identifier"
-  writeFile "./report.html" $ renderTemplate "foobar" exit exit
+-- generateHtml = do
+--   exit <- generateJson "db.txt" "Identifier"
+--   writeFile "./report.html" $ renderTemplate "foobar" exit exit
 
 saveGrep :: IO Int -> String -> IO MetricHistory
 saveGrep results name =
   results >>= (addMetric "db.txt" name)
 
+saveAllStats :: IO MetricHistory
 saveAllStats =
   saveGrep identifierCount "Identifier"
   `seq`
@@ -37,11 +38,11 @@ mainEntry = getArgs >>= parse
 
 parse :: [String] -> IO ()
 parse ["-a"] = saveAllStats >> exit
-parse ["-s"] = generateHtml >> exit
+-- parse ["-s"] = generateHtml >> exit
 parse ["-c"] = clearFile "db.txt" >> exit
 parse ["-h"] = usage >> exit
 parse ["-t"] = (identifierCount >>= (putStrLn . show)) >> exit
-parse [] = usage >> exit
+parse _ = usage >> exit
 
 usage :: IO ()
 usage = putStrLn "Usage: metrics \n [-h help]\n [-c clear database]\n [-s generate html file from database] \n [-a update database with todays metrics]\n"

@@ -7,7 +7,6 @@
        , findAllCount
      ) where
 
-import Data.Functor ((<$>))
 import Data.Text (toLower, pack, isInfixOf, isPrefixOf)
 import System.Process (readProcess)
 
@@ -24,6 +23,7 @@ grepRepo prefix search =
   if prefix == "" then filterOnlyValid <$> readProcess "git" ["grep", search] "."
   else filterOnlyValid <$> readProcess "git" ["grep", prefix, search] "."
 
+countGrepRepo :: String -> String -> IO Int
 countGrepRepo prefix search = length <$> grepRepo prefix search
 
 ormOrFringeUsages :: String -> Bool
@@ -41,7 +41,11 @@ ormOrFringeUsages a = (contains "Algo.Collateral.Core" a)
   || (contains "Designer" a)
 
 
+identifierCount :: IO Int
 identifierCount = (countGrepRepo "-w" "Identifier")
+saveCount :: IO Int
 saveCount = (countGrepRepo "" "\\.Save(")
+findCount :: IO Int
 findCount = (countGrepRepo "" "\\.Find(")
+findAllCount :: IO Int
 findAllCount = (countGrepRepo "" "\\.FindAll(")
