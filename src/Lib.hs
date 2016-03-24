@@ -9,6 +9,7 @@ import System.Exit
 import Text.Hamlet
 import Text.Blaze.Html.Renderer.String (renderHtml)
 import Text.Blaze.Html
+import Control.Monad.Reader (runReaderT)
 import Database (load, addMetric, clearFile, generateJson, MetricHistory)
 import Grep (identifierCount, findCount, findAllCount, saveCount)
 
@@ -21,7 +22,7 @@ import Grep (identifierCount, findCount, findAllCount, saveCount)
 
 saveGrep :: IO Int -> String -> IO MetricHistory
 saveGrep results name =
-  results >>= (addMetric "db.txt" name)
+  results >>= (\count -> runReaderT (addMetric name count) "db.txt" )
 
 saveAllStats :: IO MetricHistory
 saveAllStats =
@@ -39,7 +40,7 @@ mainEntry = getArgs >>= parse
 parse :: [String] -> IO ()
 parse ["-a"] = saveAllStats >> exit
 -- parse ["-s"] = generateHtml >> exit
-parse ["-c"] = clearFile "db.txt" >> exit
+parse ["-c"] = runReaderT clearFile "db.txt" >> exit
 parse ["-h"] = usage >> exit
 parse ["-t"] = (identifierCount >>= (putStrLn . show)) >> exit
 parse _ = usage >> exit
